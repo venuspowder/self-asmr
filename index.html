@@ -88,6 +88,36 @@ input[type=range]{accent-color:#e8a06a;width:80px;height:22px;touch-action:manip
 @keyframes rip{from{transform:translate(-50%,-50%) scale(.4);opacity:.9}
   to{transform:translate(-50%,-50%) scale(3.4);opacity:0}}
 
+/* ---------- 后脑解痒模式 ---------- */
+.seg{display:flex;border:1px solid rgba(255,255,255,.14);border-radius:20px;overflow:hidden}
+.seg .btn{border:none;border-radius:0;background:transparent;padding:6px 11px}
+.seg .btn.on{background:rgba(232,160,106,.2);color:#ffd9b0}
+#senBtn{display:none}
+body.head #senBtn{display:inline-flex}
+body.ear #senBtn{display:inline-flex}
+body.head #senBtn.on{background:rgba(232,160,106,.16);border-color:rgba(232,160,106,.55);color:#ffd9b0}
+body.head #ampLab{display:none}
+body.head .micWrap{display:none}
+#headWrap{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);
+  width:clamp(250px,54vmin,400px);pointer-events:none;z-index:4;display:none}
+body.head #headWrap{display:block}
+#headWrap svg{display:block;width:100%;filter:drop-shadow(0 18px 26px rgba(0,0,0,.5))}
+#headWrap .zoneG{opacity:.1;transition:opacity .5s}
+#headWrap .zoneG.numb{opacity:.05}
+/* 指下局部光斑：触到哪儿，哪儿隐隐发光 */
+.spotGlow{position:absolute;left:0;top:0;width:120px;height:120px;border-radius:50%;z-index:5;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,226,180,.55) 0%,rgba(255,200,140,.26) 40%,rgba(255,180,110,0) 70%);
+  opacity:0;will-change:transform,opacity}
+#trayHead{display:none;flex-wrap:wrap;gap:8px;flex:1;justify-content:center}
+body.head #trayHead{display:flex}
+body.head #trayDesk{display:none}
+#trayDesk{display:flex;flex-wrap:wrap;gap:8px;flex:1;justify-content:center}
+.pp.fpad{width:56px}
+.pp.nail{width:62px}
+.pp.knead{width:64px}
+.pp.hairg{width:60px}
+.pp.hpalm{width:100px}
+
 /* ---------- 道具 ---------- */
 .pp{position:absolute;left:0;top:0;z-index:10;touch-action:none;cursor:grab;will-change:transform;
   filter:drop-shadow(0 12px 12px rgba(0,0,0,.5))}
@@ -189,6 +219,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
   <header>
     <div class="logo"><b>Self ASMR</b><span>双耳互动助眠工作室</span></div>
     <div class="ctl">
+      <div class="seg" id="viewSeg"><button class="btn segBtn on" data-view="desk">桌面双麦</button><button class="btn segBtn" data-view="ear">耳道</button><button class="btn segBtn" data-view="head">后脑视角</button></div>
       <label>音量 <input id="vol" type="range" min="0" max="100" value="80"></label>
       <label>场景 <select id="sceneSel">
         <option value="none">无</option>
@@ -197,8 +228,8 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
         <option value="fire">壁炉</option>
       </select></label>
       <label>强度 <input id="tone" type="range" min="0" max="100" value="0"></label>
-      <label>频率 <input id="amp" type="range" min="0" max="100" value="21"></label>
-      <button class="btn" id="earBtn"><span class="aDot"></span><span id="earTxt">耳道模式 关</span></button>
+      <label id="ampLab">频率 <input id="amp" type="range" min="0" max="100" value="21"></label>
+      <button class="btn on" id="senBtn">敏感点 开</button>
       <button class="btn" id="clearBtn">回收道具</button>
       <button class="btn" id="helpBtn">玩法</button>
       <button class="btn rec" id="recBtn"><span id="recDot"></span><span id="recTxt">开始录制</span></button>
@@ -209,18 +240,79 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
   <main id="stage">
     <div class="micWrap" id="micL"><div class="glow" id="glowL"></div><div class="micTag">左耳 · L</div></div>
     <div class="micWrap" id="micR"><div class="glow" id="glowR"></div><div class="micTag">右耳 · R</div></div>
+    <div id="headWrap" aria-hidden="true">
+      <svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg">
+        <!-- 后脑线稿：黑布上的金色描线，线稿即"你这颗头" -->
+        <path d="M150,42 C205,42 244,86 246,148 C247,196 228,238 196,258 C186,264 178,272 174,284 L172,300 L128,300 L126,284 C122,272 114,264 104,258 C72,238 53,196 54,148 C56,86 95,42 150,42 Z"
+          fill="rgba(20,14,18,.55)" stroke="rgba(216,185,138,.85)" stroke-width="2.4" stroke-linejoin="round"/>
+        <path d="M150,52 C196,54 230,92 232,140" fill="none" stroke="rgba(216,185,138,.22)" stroke-width="1.6"/>
+        <path d="M148,54 C104,58 70,96 68,144" fill="none" stroke="rgba(216,185,138,.22)" stroke-width="1.6"/>
+        <path d="M156,104 C165,108 164,120 155,122 C148,123.5 143,117 146.5,111.5 C149,107.8 154.5,108 156,112" fill="none" stroke="rgba(216,185,138,.55)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M124,84 C112,100 106,120 107.5,140" fill="none" stroke="rgba(216,185,138,.26)" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M176,84 C188,100 194,120 192.5,140" fill="none" stroke="rgba(216,185,138,.26)" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M150,64 C186,68 214,102 216,148" fill="none" stroke="rgba(216,185,138,.22)" stroke-width="1.4"/>
+        <path d="M150,66 C114,70 86,104 84,150" fill="none" stroke="rgba(216,185,138,.22)" stroke-width="1.4"/>
+        <path d="M56,158 C40,150 30,162 34,178 C38,194 50,202 60,198" fill="rgba(20,14,18,.4)" stroke="rgba(216,185,138,.8)" stroke-width="2.2"/>
+        <path d="M244,158 C260,150 270,162 266,178 C262,194 250,202 240,198" fill="rgba(20,14,18,.4)" stroke="rgba(216,185,138,.8)" stroke-width="2.2"/>
+        <path d="M126,296 C128,306 122,314 112,318 M174,296 C172,306 178,314 188,318" fill="none" stroke="rgba(216,185,138,.5)" stroke-width="2"/>
+        <!-- 肩膀与上背 -->
+        <path d="M118,310 C92,318 52,330 30,348 C14,361 8,378 10,398" fill="none" stroke="rgba(216,185,138,.72)" stroke-width="2.2"/>
+        <path d="M182,310 C208,318 248,330 270,348 C286,361 292,378 290,398" fill="none" stroke="rgba(216,185,138,.72)" stroke-width="2.2"/>
+        <path d="M118,310 C128,318 138,322 150,322 C162,322 172,318 182,310" fill="none" stroke="rgba(216,185,138,.45)" stroke-width="1.8"/>
+        <path d="M64,362 C96,352 128,348 150,348 C172,348 204,352 236,362" fill="none" stroke="rgba(216,185,138,.28)" stroke-width="1.4"/>
+        <path d="M112,386 C124,392 138,394 150,394 C162,394 176,392 188,386" fill="none" stroke="rgba(216,185,138,.2)" stroke-width="1.4"/>
+        <!-- 敏感分区（JS 控制亮度，numb=挠钝了） -->
+        <g class="zoneG" data-z="crown">
+          <circle cx="150" cy="84" r="40" fill="none" stroke="rgba(255,238,205,.55)" stroke-width="1" stroke-dasharray="2.5 6"/>
+          <path d="M132,74 q5,-7 10,0 q5,7 10,0 q5,-7 10,0" fill="none" stroke="rgba(255,240,214,.9)" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M136,94 q5,-6 9,0 q5,6 9,0 q4,-6 9,0" fill="none" stroke="rgba(255,240,214,.7)" stroke-width="1.3" stroke-linecap="round"/>
+        </g>
+        <g class="zoneG" data-z="occ">
+          <circle cx="150" cy="206" r="46" fill="none" stroke="rgba(255,238,205,.55)" stroke-width="1" stroke-dasharray="2.5 6"/>
+          <path d="M128,196 q6,-7 11,0 q6,7 11,0 q6,-7 11,0 q6,7 11,0" fill="none" stroke="rgba(255,240,214,.9)" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M134,218 q5,-6 9,0 q5,6 9,0 q5,-6 9,0" fill="none" stroke="rgba(255,240,214,.7)" stroke-width="1.3" stroke-linecap="round"/>
+        </g>
+        <g class="zoneG" data-z="lt">
+          <circle cx="78" cy="152" r="34" fill="none" stroke="rgba(255,238,205,.55)" stroke-width="1" stroke-dasharray="2.5 6"/>
+          <path d="M70,134 q6,4 0,9 q-6,5 0,9 q6,4 0,9" fill="none" stroke="rgba(255,240,214,.85)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M84,138 q5,4 0,8 q-5,4 0,8" fill="none" stroke="rgba(255,240,214,.6)" stroke-width="1.2" stroke-linecap="round"/>
+        </g>
+        <g class="zoneG" data-z="rt">
+          <circle cx="222" cy="152" r="34" fill="none" stroke="rgba(255,238,205,.55)" stroke-width="1" stroke-dasharray="2.5 6"/>
+          <path d="M230,134 q-6,4 0,9 q6,5 0,9 q-6,4 0,9" fill="none" stroke="rgba(255,240,214,.85)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M216,138 q-5,4 0,8 q5,4 0,8" fill="none" stroke="rgba(255,240,214,.6)" stroke-width="1.2" stroke-linecap="round"/>
+        </g>
+        <g class="zoneG" data-z="lbe">
+          <circle cx="64" cy="206" r="26" fill="none" stroke="rgba(255,238,205,.55)" stroke-width="1" stroke-dasharray="2.5 6"/>
+          <path d="M56,198 q5,3 0,7 q-5,4 0,7 q5,3 0,7" fill="none" stroke="rgba(255,240,214,.85)" stroke-width="1.4" stroke-linecap="round"/>
+        </g>
+        <g class="zoneG" data-z="rbe">
+          <circle cx="236" cy="206" r="26" fill="none" stroke="rgba(255,238,205,.55)" stroke-width="1" stroke-dasharray="2.5 6"/>
+          <path d="M244,198 q-5,3 0,7 q5,4 0,7 q-5,3 0,7" fill="none" stroke="rgba(255,240,214,.85)" stroke-width="1.4" stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
     <div id="hint">拖出一段轨迹后双击道具开启循环；点空白处或顶栏「⏹ 停止自动」随时结束，不用追着它跑</div>
   </main>
 
   <footer>
-    <div class="trayCard" data-type="hair"><div class="ic"></div><b>马尾丝</b><i>高频酥麻 · 爆破音</i></div>
-    <div class="trayCard" data-type="brush"><div class="ic"></div><b>刷子</b><i>软刷轻扫</i></div>
-    <div class="trayCard" data-type="cotton"><div class="ic"></div><b>棉签</b><i>缓摩 · 画圈</i></div>
-    <div class="trayCard" data-type="cap"><div class="ic"></div><b>瓶盖</b><i>轻点 · 敲击</i></div>
-    <div class="trayCard" data-type="spray"><div class="ic"></div><b>喷雾</b><i>细雾喷洒</i></div>
-    <div class="trayCard" data-type="water"><div class="ic"></div><b>水球</b><i>玻璃水球 · 晃荡冒泡</i></div>
-    <div class="trayCard" data-type="paper"><div class="ic"></div><b>纸冰山</b><i>油蜡纸 · 酥脆碎裂</i></div>
-    <div class="trayCard" data-type="palm"><div class="ic"></div><b>捂耳</b><i>掌心捂麦</i></div>
+    <div id="trayDesk">
+      <div class="trayCard" data-type="hair"><div class="ic"></div><b>马尾丝</b><i>高频酥麻 · 爆破音</i></div>
+      <div class="trayCard" data-type="brush"><div class="ic"></div><b>刷子</b><i>软刷轻扫</i></div>
+      <div class="trayCard" data-type="cotton"><div class="ic"></div><b>棉签</b><i>缓摩 · 画圈</i></div>
+      <div class="trayCard" data-type="cap"><div class="ic"></div><b>瓶盖</b><i>轻点 · 敲击</i></div>
+      <div class="trayCard" data-type="spray"><div class="ic"></div><b>喷雾</b><i>细雾喷洒</i></div>
+      <div class="trayCard" data-type="water"><div class="ic"></div><b>水球</b><i>玻璃水球 · 晃荡冒泡</i></div>
+      <div class="trayCard" data-type="paper"><div class="ic"></div><b>纸冰山</b><i>油蜡纸 · 酥脆碎裂</i></div>
+      <div class="trayCard" data-type="palm"><div class="ic"></div><b>捂耳</b><i>掌心捂麦</i></div>
+    </div>
+    <div id="trayHead">
+      <div class="trayCard" data-type="fpad"><div class="ic"></div><b>指腹按压</b><i>缓按 · 揉压</i></div>
+      <div class="trayCard" data-type="nail"><div class="ic"></div><b>指甲轻挠</b><i>酥麻细响</i></div>
+      <div class="trayCard" data-type="knead"><div class="ic"></div><b>五指抓挠</b><i>抓-松节奏</i></div>
+      <div class="trayCard" data-type="hairg"><div class="ic"></div><b>拢发丝</b><i>唰拢 · 发丝碎响</i></div>
+      <div class="trayCard" data-type="hpalm"><div class="ic"></div><b>掌捂</b><i>掌心捂头皮</i></div>
+    </div>
   </footer>
 </div>
 
@@ -240,7 +332,8 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
     <ol>
       <li>点击下方道具放到桌面；按住拖动，靠近哪边，声音就在哪边</li>
       <li>按住画一条轨迹（比如绕两边画个 8 字）后<b>双击道具</b>，它就会一直循环这条路线；道具左上角按钮切换「划 / 振」两种模式：划动=只有划过才响，自振=贴住麦克风就自己响</li>
-      <li>「耳道模式」把麦克风换成耳道：道具放得越深，声音越近、越闷、低频越足；录制可导出 WAV</li>
+      <li>「耳道」视角：道具放进耳道越深，声音越近、越闷、低频越足；敏感点开着时，耳廓、耳屏、耳垂、耳道口各有各的频段，绕着换位置挠；录制可导出 WAV</li>
+      <li>顶栏切到「后脑视角」：线稿后脑就是你这颗头，用指腹按压、指甲轻挠、五指抓挠、拢发丝、掌捂在敏感分区里操作——声音用 3D 定位从头顶、脑后、耳边环绕过来，每个分区有自己敏感的频段；触到的位置会隐隐发光，同一分区挠久了会"麻"（声音变钝），换区轮着挠更酥</li>
     </ol>
     <div class="tip">请佩戴耳机体验，双耳定位才明显。小玩法：双手指各拖一个道具；「捂耳」盖住耳道口会让那一边变闷；「场景」选雨夜、雪夜或壁炉当底噪，搭配强度旋钮，更适合睡前循环。</div>
     <button class="btn primary" id="startBtn">戴上耳机，开始</button>
@@ -443,20 +536,30 @@ function gainNode(v){const g=AC.createGain();g.gain.value=v;return g;}
 function filt(type,f,q){const x=AC.createBiquadFilter();x.type=type;x.frequency.value=f;
   if(q!=null)x.Q.value=q;return x;}
 /* 双麦克风总线：单声道输入 → 按左右麦增益合成立体声 */
-function makeBus(){
+function makeBus(ear){
   const input=AC.createGain();
   const gL=AC.createGain(),gR=AC.createGain();
   const merger=AC.createChannelMerger(2);
-  input.connect(gL);input.connect(gR);
+  const bus={input,gL,gR};
+  let src=input;
+  if(ear){ /* 耳道视角：分区频响 eq 串在双麦增益前 */
+    const eq=AC.createBiquadFilter();eq.type='peaking';
+    eq.frequency.value=1000;eq.Q.value=1;eq.gain.value=0;
+    input.connect(eq);src=eq;
+    bus.eq=eq;
+  }
+  src.connect(gL);src.connect(gR);
   gL.connect(merger,0,0);gR.connect(merger,0,1);
   merger.connect(master);
-  return{input,gL,gR};
+  return bus;
 }
 
 /* ================= 各道具音效引擎 ================= */
 function engineFor(type){
-  const bus=makeBus();
+  /* 后脑视角用 HRTF 3D 总线；耳道视角用双麦总线+分区频响 eq（切视角时道具已回收，不会错配） */
+  const bus=HEAD?makeHeadBus():makeBus(EAR);
   const E={bus,type,level:0,lastX:0,lastY:0,nodes:[]};
+  E.head=!!bus.pan;
   const keep=n=>{E.nodes.push(n);return n;};
   /* 交互模式：glide=划动摩擦（只有划过才响） auto=贴附自振（贴住麦克风自动动） */
   E.mode='glide';
@@ -952,8 +1055,161 @@ function engineFor(type){
     E.tap=()=>{crunch(.95);vibe(9);}; /* 轻点=戳一下纸面：一片脆裂 */
   }
 
+  /* ================= 头顶模式：手部动作套件（HRTF 3D，跟手+轻点，无自振） ================= */
+
+  /* ---------- 指腹按压：掌面贴头皮缓摩，按住有承压低频 ---------- */
+  else if(type==='fpad'){
+    E.head=true;
+    const src=keep(noiseSrc());
+    const rub=keep(filt('lowpass',620,.7)),gRb=keep(gainNode(0));
+    src.connect(rub);rub.connect(gRb);gRb.connect(bus.input);
+    const mid=keep(filt('bandpass',950,1)),gMd=keep(gainNode(0));
+    src.connect(mid);mid.connect(gMd);gMd.connect(bus.input);
+    let i=0,held=false;
+    const pressTh=str=>blast((t0,out)=>{
+      const o=AC.createOscillator();o.frequency.setValueAtTime(95,t0);
+      o.frequency.exponentialRampToValueAtTime(48,t0+.12);
+      const g=gainNode(0);o.connect(g);g.connect(out);
+      g.gain.setValueAtTime(.5*str,t0);g.gain.exponentialRampToValueAtTime(.001,t0+.18);
+      o.start(t0);o.stop(t0+.19);return[o,g];});
+    E.press=()=>{held=true;pressTh(.7);vibe(6);};
+    E.release=()=>{held=false;};
+    E.update=(dt,x,y,v)=>{
+      E.lastX=x;E.lastY=y;
+      const hand=Math.max(clamp(v/420,0,1),held?.35:0);
+      i+=(hand-i)*Math.min(1,dt*7);
+      const wob=.85+.15*Math.sin(AC.currentTime*1.7+x*.01);
+      gRb.gain.value=.5*i*wob;gMd.gain.value=.12*i;
+      E.level=i*.8;};
+    E.tap=()=>pressTh(.8);
+  }
+
+  /* ---------- 指甲轻挠：连续擦划声（纯带通噪声，无敲击颗粒），快挠亮慢挠钝 ---------- */
+  else if(type==='nail'){
+    E.head=true;
+    const src=keep(noiseSrc());
+    const rasp=keep(filt('bandpass',3400,1.7)),gRs=keep(gainNode(0));
+    src.connect(rasp);rasp.connect(gRs);gRs.connect(bus.input);
+    const glint=keep(filt('bandpass',7400,2.6)),gGl=keep(gainNode(0));
+    src.connect(glint);glint.connect(gGl);gGl.connect(bus.input);
+    let i=0,peak=0;
+    E.update=(dt,x,y,v)=>{
+      E.lastX=x;E.lastY=y;
+      const hand=clamp(v/480,0,1);
+      i+=(hand-i)*Math.min(1,dt*10);
+      /* 轻微颗粒闪烁，像甲面掠过皮纹，但不是离散的"哒" */
+      const gr=.72+.28*Math.sin(AC.currentTime*21+Math.sin(AC.currentTime*7.7)*2.1);
+      gRs.gain.value=.36*i*gr;
+      gGl.gain.value=.08*i*gr;
+      rasp.frequency.value=2800+900*i;
+      peak=Math.max(peak,i);
+      E.level=peak*.85;
+      peak*=Math.exp(-dt*5);};
+    E.tap=()=>blast((t0,out)=>{
+      const n=AC.createBufferSource();n.buffer=noiseBuf;n.loop=true;
+      const f=filt('bandpass',3600,2),g=gainNode(0);
+      n.connect(f);f.connect(g);g.connect(out);
+      g.gain.setValueAtTime(.3,t0);g.gain.exponentialRampToValueAtTime(.001,t0+.15);
+      n.start(t0);n.stop(t0+.16);
+      return[n,f,g];});
+  }
+
+  /* ---------- 五指抓挠：揉搓主体 + 抓-松低频节奏（无敲击） ---------- */
+  else if(type==='knead'){
+    E.head=true;
+    const src=keep(noiseSrc());
+    const rub=keep(filt('bandpass',1050,1)),gRb=keep(gainNode(0));
+    src.connect(rub);rub.connect(gRb);gRb.connect(bus.input);
+    const deep=keep(filt('lowpass',260,.6)),gDp=keep(gainNode(0));
+    src.connect(deep);deep.connect(gDp);gDp.connect(bus.input);
+    let i=0,held=false;
+    E.press=()=>{held=true;};
+    E.release=()=>{held=false;};
+    E.update=(dt,x,y,v)=>{
+      E.lastX=x;E.lastY=y;
+      const hand=Math.max(clamp(v/460,0,1),held?.45:0);
+      i+=(hand-i)*Math.min(1,dt*6);
+      const grip=.5+.5*Math.sin(AC.currentTime*1.3); /* 抓紧-放松的呼吸节奏 */
+      gRb.gain.value=.34*i*(.6+.4*grip);
+      gDp.gain.value=.18*i*grip;
+      E.level=i*.85;};
+    E.tap=()=>blast((t0,out)=>{
+      const o=AC.createOscillator();o.frequency.setValueAtTime(95,t0);
+      o.frequency.exponentialRampToValueAtTime(50,t0+.1);
+      const g=gainNode(0);o.connect(g);g.connect(out);
+      g.gain.setValueAtTime(.4,t0);g.gain.exponentialRampToValueAtTime(.001,t0+.16);
+      o.start(t0);o.stop(t0+.17);return[o,g];});
+  }
+
+  /* ---------- 拢发丝：拢头发的"唰"扫频 + 发丝间细碎响 ---------- */
+  else if(type==='hairg'){
+    E.head=true;
+    const src=keep(noiseSrc());
+    const sw=keep(filt('bandpass',1500,.9)),gSw=keep(gainNode(0));
+    src.connect(sw);sw.connect(gSw);gSw.connect(bus.input);
+    const air=keep(filt('highpass',5200,.7)),gAr=keep(gainNode(0));
+    src.connect(air);air.connect(gAr);gAr.connect(bus.input);
+    let i=0,lastDir=0,peak=0;
+    const shf=str=>blast((t0,out)=>{
+      const n=AC.createBufferSource();n.buffer=noiseBuf;n.loop=true;
+      const f=filt('bandpass',1100,.9),g=gainNode(0);
+      n.connect(f);f.connect(g);g.connect(out);
+      f.frequency.setValueAtTime(900,t0);
+      f.frequency.exponentialRampToValueAtTime(2500,t0+.2);
+      g.gain.setValueAtTime(.0001,t0);
+      g.gain.linearRampToValueAtTime(.26*str,t0+.05);
+      g.gain.exponentialRampToValueAtTime(.001,t0+.26);
+      n.start(t0);n.stop(t0+.28);
+      const nodes=[n,f,g];
+      for(let k=0;k<3;k++){const td=t0+rand(.02,.16);
+        const c=AC.createBufferSource();c.buffer=clickBuf;
+        const cf=filt('bandpass',rand(3600,6800),4),cg=gainNode(rand(.03,.07)*str);
+        c.connect(cf);cf.connect(cg);cg.connect(out);
+        c.start(td);c.stop(td+.012);nodes.push(c,cf,cg);}
+      return nodes;});
+    E.update=(dt,x,y,v,vx)=>{
+      E.lastX=x;E.lastY=y;
+      const hand=clamp(v/500,0,1);
+      i+=(hand-i)*Math.min(1,dt*8);
+      gSw.gain.value=.2*i;gAr.gain.value=.04*i;
+      sw.frequency.value=1100+800*i;
+      E.level=i*.75;
+      const dir=vx>60?1:vx<-60?-1:0;
+      if(dir&&dir!==lastDir&&i>.12){lastDir=dir;shf(.55+.45*i);peak=Math.max(peak,i);rippleAt(x,y);}
+      peak*=Math.exp(-dt*5);};
+    E.tap=()=>{shf(.9);vibe(8);};
+  }
+
+  /* ---------- 掌捂头皮：整掌捂压低频咚 + 轻揉，免疫掉得最快 ---------- */
+  else if(type==='hpalm'){
+    E.head=true;
+    const src=keep(noiseSrc());
+    const rub=keep(filt('bandpass',1150,1.1)),gRb=keep(gainNode(0));
+    src.connect(rub);rub.connect(gRb);gRb.connect(bus.input);
+    const prs=keep(filt('lowpass',150,.5)),gPr=keep(gainNode(0));
+    src.connect(prs);prs.connect(gPr);gPr.connect(bus.input);
+    let i=0,held=false;
+    const thump=str=>blast((t0,out)=>{
+      const o=AC.createOscillator();o.frequency.setValueAtTime(85,t0);
+      o.frequency.exponentialRampToValueAtTime(42,t0+.16);
+      const g=gainNode(0);o.connect(g);g.connect(out);
+      g.gain.setValueAtTime(.68*str,t0);g.gain.exponentialRampToValueAtTime(.001,t0+.24);
+      o.start(t0);o.stop(t0+.25);return[o,g];});
+    E.press=()=>{held=true;thump(.9);vibe(14);setTimeout(()=>thump(.45),95);};
+    E.release=()=>{held=false;};
+    E.update=(dt,x,y,v)=>{
+      E.lastX=x;E.lastY=y;
+      const hand=Math.max(clamp(v/500,0,1),held?.4:0);
+      i+=(hand-i)*Math.min(1,dt*8);
+      gRb.gain.value=.09*i;gPr.gain.value=.07*(held?1:0)+.05*i;
+      E.level=held?.6:i*.7;};
+    E.tap=()=>thump(.75);
+  }
+
   E.dispose=()=>{E.nodes.forEach(n=>{try{if(n.stop)n.stop();}catch(e){}try{n.disconnect();}catch(e){}});
-    try{bus.gL.disconnect();bus.gR.disconnect();bus.input.disconnect();}catch(e){}};
+    try{bus.gL.disconnect();bus.gR.disconnect();bus.input.disconnect();}catch(e){}
+    if(bus.eq){try{bus.eq.disconnect();}catch(e){}}
+    if(bus.pan){try{bus.pan.disconnect();}catch(e){}}};
   return E;
 }
 
@@ -1103,9 +1359,93 @@ function svgPaper(){const u=++UID;
     <!-- 雪帽 -->
     <path d="M50,12 L58,27 L50,32 L42,27 Z" fill="#ffffff"/>
   </svg>`;}
+/* ---------- 头顶模式：动作图标（直观符号化，不画手的局部特写） ---------- */
+/* 指腹按压：指纹 */
+function svgFpad(){const u=++UID;
+  return `<svg viewBox="0 0 64 74" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" stroke="#dcb98f" stroke-width="3.1" stroke-linecap="round">
+      <path d="M32,7 C17,7 6,19.5 6,35 C6,46 8,55 12,63"/>
+      <path d="M32,15 C21.5,15 13,23.5 13,35 C13,43 14.5,49.5 17.5,55.5"/>
+      <path d="M32,23 C26,23 21,27.5 21,35 C21,42.5 22.5,48.5 25.5,54"/>
+      <path d="M32,31 C28.5,31 26,33.5 26,37.5 C26,45 28,51 31,56.5"/>
+      <path d="M38,31 C41.5,31 44,33.5 44,37.5 C44,45 42,51 39,56.5"/>
+      <path d="M38,23 C44,23 49,27.5 49,35 C49,43 47.5,49.5 44.5,55.5"/>
+      <path d="M38,15 C48.5,15 57,23.5 57,35 C57,46 55,55 51,63"/>
+      <path d="M32,39 C34.5,39 36.5,41 36.5,44 C36.5,50 35,55 32.5,60"/>
+    </g>
+  </svg>`;}
+/* 指甲轻挠：三根指尖带着美甲 */
+function svgNail(){const u=++UID;
+  const skin='url(#nl'+u+')';
+  return `<svg viewBox="0 0 78 86" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="nl${u}" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#bd8558"/><stop offset=".3" stop-color="#e9b98c"/>
+      <stop offset=".62" stop-color="#f4d3ae"/><stop offset="1" stop-color="#d09c6e"/></linearGradient></defs>
+    <g transform="rotate(-5 39 48)">
+      <rect x="7" y="22" width="16" height="66" rx="8" fill="${skin}" stroke="rgba(122,80,52,.45)" stroke-width="1"/>
+      <rect x="30" y="13" width="16" height="75" rx="8" fill="${skin}" stroke="rgba(122,80,52,.45)" stroke-width="1"/>
+      <rect x="53" y="22" width="16" height="66" rx="8" fill="${skin}" stroke="rgba(122,80,52,.45)" stroke-width="1"/>
+      <path d="M32,26.5 C32,20 35,16.5 38,16.5 C41,16.5 44,20 44,26.5 C44,33 41.4,37.2 38,37.2 C34.6,37.2 32,33 32,26.5 Z" fill="#f9eddd" stroke="rgba(158,118,86,.7)" stroke-width="1.1"/>
+      <path d="M34.4,23 C35.2,19.6 36.6,18 38.2,17.4" stroke="rgba(255,255,255,.95)" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <path d="M34.5,35.6 C35.6,36.9 40.4,36.9 41.5,35.6" stroke="rgba(198,154,118,.6)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M9,35.5 C9,29 12,25.5 15,25.5 C18,25.5 21,29 21,35.5 C21,42 18.4,46.2 15,46.2 C11.6,46.2 9,42 9,35.5 Z" fill="#f9eddd" stroke="rgba(158,118,86,.7)" stroke-width="1.1"/>
+      <path d="M11.4,32 C12.2,28.6 13.6,27 15.2,26.4" stroke="rgba(255,255,255,.95)" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <path d="M11.5,44.6 C12.6,45.9 17.4,45.9 18.5,44.6" stroke="rgba(198,154,118,.6)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M55,35.5 C55,29 58,25.5 61,25.5 C64,25.5 67,29 67,35.5 C67,42 64.4,46.2 61,46.2 C57.6,46.2 55,42 55,35.5 Z" fill="#f9eddd" stroke="rgba(158,118,86,.7)" stroke-width="1.1"/>
+      <path d="M57.4,32 C58.2,28.6 59.6,27 61.2,26.4" stroke="rgba(255,255,255,.95)" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <path d="M57.5,44.6 C58.6,45.9 63.4,45.9 64.5,44.6" stroke="rgba(198,154,118,.6)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    </g>
+  </svg>`;}
+/* 五指抓挠：举手手掌（整条轮廓一笔画，不拼装） */
+function svgKnead(){const u=++UID;
+  return `<svg viewBox="0 0 76 86" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#f2d6b2" d="M28,82
+      C20,77 14,69.5 12.2,60
+      C11.4,54 12.6,48.6 16.4,46.4
+      C19.4,44.7 22.2,46 23.4,48.8
+      C24.6,51.8 25.2,55 26,57.5
+      C26.5,53.5 26.2,50 26,46
+      L26,19 C26,13.5 28,10.5 30.8,10.5
+      C33.6,10.5 35.5,13.5 35.5,19
+      L35.5,44 C35.5,46.8 38,46.8 38,44
+      L38,8.5 C38,3.5 40,1.5 42.7,1.5
+      C45.4,1.5 47.5,3.5 47.5,8.5
+      L47.5,44 C47.5,46.8 50,46.8 50,44
+      L50,11 C50,5.5 52,3 54.7,3
+      C57.4,3 59.5,5.5 59.5,11
+      L59.5,40 C59.5,42.8 62,42.8 62,40
+      L62,25 C62,19.5 64,17 66.5,17
+      C69,17 71,19.5 71,25
+      L71,49 C71.5,58 68,67 61,72.5
+      C56,76.5 49,78.5 43,79
+      C36,79.5 30,81.5 28,82 Z"/>
+    <path d="M25,62 C31,58.5 42,57.5 52,59.5" stroke="rgba(120,78,50,.3)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path d="M27,71 C34,74.5 45,74.5 53,70.5" stroke="rgba(120,78,50,.2)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  </svg>`;}
+/* 拢发丝：背影长发＋斜插的小梳子 */
+function svgHairg(){const u=++UID;
+  return `<svg viewBox="0 0 72 88" xmlns="http://www.w3.org/2000/svg">
+    <path d="M36,5 C21,5 11.5,16 11.5,30.5 C11.5,37.5 13.8,43.5 17.8,48.5 C13.5,60 11.5,72 13.5,84.5 C19.5,80.5 23.5,78.8 26.5,79.8 C29.5,84.2 32.6,86.2 36,86.2 C39.4,86.2 42.5,84.2 45.5,79.8 C48.5,78.8 52.5,80.5 58.5,84.5 C60.5,72 58.5,60 54.2,48.5 C58.2,43.5 60.5,37.5 60.5,30.5 C60.5,16 51,5 36,5 Z" fill="#63452b" stroke="rgba(255,222,180,.28)" stroke-width="1.2"/>
+    <path d="M36,7.5 C27,7.5 19.5,13.5 17,23" stroke="rgba(255,236,210,.45)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <path d="M36,9 L36,27" stroke="rgba(30,18,10,.6)" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M25,33 C23,47 24.5,61 21.5,76" stroke="rgba(255,236,210,.3)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M47,33 C49,47 47.5,61 50.5,76" stroke="rgba(255,236,210,.3)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M36,31 C35.5,47 36.5,63 35.5,79" stroke="rgba(255,236,210,.18)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- 斜插的小梳子：梳背在外，齿吃进头发 -->
+    <g transform="rotate(36 22 20)">
+      <rect x="9.5" y="25.2" width="1.9" height="12.5" rx=".9" fill="#e9c9a0"/>
+      <rect x="14.1" y="25.2" width="1.9" height="13.5" rx=".9" fill="#e9c9a0"/>
+      <rect x="18.7" y="25.2" width="1.9" height="14.2" rx=".9" fill="#e9c9a0"/>
+      <rect x="23.3" y="25.2" width="1.9" height="13.5" rx=".9" fill="#e9c9a0"/>
+      <rect x="27.9" y="25.2" width="1.9" height="12.5" rx=".9" fill="#e9c9a0"/>
+      <rect x="7" y="18.6" width="32" height="7.2" rx="3.6" fill="#e9c9a0" stroke="rgba(122,80,52,.55)" stroke-width=".9"/>
+      <rect x="10.5" y="20.6" width="25" height="1.4" rx=".7" fill="rgba(122,80,52,.28)"/>
+    </g>
+  </svg>`;}
 function svgFor(type){
   return {hair:svgHair,brush:svgBrush,cotton:svgCotton,cap:svgCap,
-    spray:svgSpray,water:svgWater,palm:svgPalm,paper:svgPaper}[type]();
+    spray:svgSpray,water:svgWater,palm:svgPalm,paper:svgPaper,
+    fpad:svgFpad,nail:svgNail,knead:svgKnead,hairg:svgHairg,hpalm:svgPalm}[type]();
 }
 /* 麦克风 */
 function svgMic(){const u=++UID;
@@ -1175,9 +1515,27 @@ function layout(){
   const eo=EAR?-micW*.05:0, eyo=EAR?-micW*.06:0;
   micPx.L={x:stageW*fx+eo,y:stageH*.44+eyo};
   micPx.R={x:stageW*(1-fx)-eo,y:stageH*.44+eyo};
+  /* 耳道视角：分区坐标挂到左右耳锚点上 */
+  if(EAR)for(const z of ZONES_EAR){
+    const m=z.side<0?micPx.R:micPx.L;
+    z.px=m.x+z.dx*(z.side<0?-1:1);
+    z.py=m.y+z.dy;
+    z.pr=z.r;
+  }
   const ml=$('#micL'),mr=$('#micR');
   ml.style.left=(fx*100)+'%';ml.style.top='44%';
   mr.style.left=((1-fx)*100)+'%';mr.style.top='44%';
+  /* 后脑解痒模式：以线稿为准换算敏感分区到舞台坐标
+     viewBox 300×420，头部圆心在 (150,160)，肩膀画到 y≈398 */
+  const hw=$('#headWrap'),sr=stage.getBoundingClientRect();
+  const hb=hw.getBoundingClientRect();
+  if(hb.width>0){
+    const sc=hb.width/300;
+    headCx=hb.left+(150/300)*hb.width-sr.left;
+    headCy=hb.top+(160/420)*hb.height-sr.top;
+    headR=hb.width*.315;   /* 头部椭圆 rx≈95/300 */
+    for(const z of ZONES){z.px=headCx+(z.vx-150)*sc;z.py=headCy+(z.vy-160)*sc;z.pr=z.r*sc;}
+  }
 }
 window.addEventListener('resize',layout);
 
@@ -1199,12 +1557,129 @@ for(let i=0;i<14;i++){const d=document.createElement('div');d.className='dust';
 
 /* ================= 耳道模式 ================= */
 let EAR=false;
-$('#earBtn').addEventListener('click',()=>{
-  EAR=!EAR;
-  $('#earBtn').classList.toggle('on',EAR);
-  $('#earTxt').textContent=EAR?'耳道模式 开':'耳道模式 关';
+/* ================= 耳道视角分区 ================= */
+/* dx/dy 以左耳耳道口为基准（耳屏朝舞台中轴=+x），右耳镜像 dx 取反；坐标由 layout 挂到 micPx */
+const ZONES_EAR=[
+  {id:'l-helix',name:'左耳廓',side:1,dx:-5,dy:-30,r:20,hz:2600,q:1.3,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{cotton:.8,cap:.9,hair:1,brush:.7,spray:.4,water:.5,paper:.6,palm:.3}},
+  {id:'l-tragus',name:'左耳屏',side:1,dx:27,dy:2,r:15,hz:700,q:1.1,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{cotton:.7,cap:.6,hair:.5,brush:.6,spray:.5,water:.6,paper:.4,palm:1}},
+  {id:'l-lobe',name:'左耳垂',side:1,dx:-3,dy:31,r:17,hz:500,q:1,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{cotton:.8,cap:.7,hair:.6,brush:.7,spray:.4,water:.6,paper:.5,palm:.8}},
+  {id:'l-canal',name:'左耳道口',side:1,dx:0,dy:0,r:24,hz:1300,q:1.2,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{cotton:1,cap:.9,hair:.9,brush:.6,spray:.7,water:.7,paper:.6,palm:.5}},
+  {id:'r-helix',name:'右耳廓',side:-1,dx:-5,dy:-30,r:20,hz:2600,q:1.3,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{cotton:.8,cap:.9,hair:1,brush:.7,spray:.4,water:.5,paper:.6,palm:.3}},
+  {id:'r-tragus',name:'右耳屏',side:-1,dx:27,dy:2,r:15,hz:700,q:1.1,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{cotton:.7,cap:.6,hair:.5,brush:.6,spray:.5,water:.6,paper:.4,palm:1}},
+  {id:'r-lobe',name:'右耳垂',side:-1,dx:-3,dy:31,r:17,hz:500,q:1,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{cotton:.8,cap:.7,hair:.6,brush:.7,spray:.4,water:.6,paper:.5,palm:.8}},
+  {id:'r-canal',name:'右耳道口',side:-1,dx:0,dy:0,r:24,hz:1300,q:1.2,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{cotton:1,cap:.9,hair:.9,brush:.6,spray:.7,water:.7,paper:.6,palm:.5}},
+];
+
+/* ================= 后脑解痒模式（第一人称头顶视角） ================= */
+let HEAD=false,SENS=true;
+let headCx=0,headCy=0,headR=0;
+/* 敏感分区：aff=各手法亲和度(0~1)，hz/q=该部位敏感的频段(MT思路：不同Hz对应不同部位)，
+   fresh=新鲜度(持续挠会钝化，离开慢慢恢复) */
+const ZONES=[
+  {id:'crown',name:'百会',vx:150,vy:84,r:40,hz:480,q:1.1,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{fpad:1,nail:.6,knead:.9,hairg:.4,hpalm:.7}},
+  {id:'occ',name:'后脑',vx:150,vy:206,r:46,hz:240,q:.9,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{fpad:.9,nail:.5,knead:.8,hairg:.3,hpalm:1}},
+  {id:'lt',name:'左颞',vx:78,vy:152,r:34,hz:3200,q:1.4,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{fpad:.8,nail:1,knead:.7,hairg:.6,hpalm:.4}},
+  {id:'rt',name:'右颞',vx:222,vy:152,r:34,hz:3200,q:1.4,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{fpad:.8,nail:1,knead:.7,hairg:.6,hpalm:.4}},
+  {id:'lbe',name:'左耳后',vx:64,vy:206,r:26,hz:6600,q:1.2,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{fpad:.7,nail:.9,knead:.5,hairg:1,hpalm:.3}},
+  {id:'rbe',name:'右耳后',vx:236,vy:206,r:26,hz:6600,q:1.2,fresh:1,glow:0,px:0,py:0,pr:0,
+   aff:{fpad:.7,nail:.9,knead:.5,hairg:1,hpalm:.3}},
+];
+const zoneEls={};
+document.querySelectorAll('#headWrap .zoneG').forEach(g=>{zoneEls[g.dataset.z]=g;});
+
+/* HRTF 总线：单声道输入 → 新鲜度增益(fg) → 分区频响(eq) → 3D 声像(pan) → 主总线
+   eq 即"部位敏感频段"：进哪个区，eq 就滑向那个区的 Hz */
+function makeHeadBus(){
+  const input=AC.createGain(),fg=AC.createGain();fg.gain.value=1;
+  const eq=AC.createBiquadFilter();eq.type='peaking';
+  eq.frequency.value=1000;eq.Q.value=1;eq.gain.value=0;
+  input.connect(fg);fg.connect(eq);
+  if(AC.createPanner){
+    const pan=AC.createPanner();
+    try{pan.panningModel='HRTF';}catch(e){}
+    pan.distanceModel='inverse';
+    pan.refDistance=.1;pan.maxDistance=.6;pan.rolloffFactor=.5;
+    eq.connect(pan);pan.connect(master);
+    return{input,fg,eq,pan,gL:null,gR:null};
+  }
+  eq.connect(master);   /* 老浏览器兜底：没有 HRTF 就单声道直连（频响分区仍有效） */
+  return{input,fg,eq,pan:null,gL:null,gR:null};
+}
+/* 头顶俯视 → 3D 坐标：屏幕上=头顶前方(略高于听者)，屏幕下=脑后(听者身后)，左右照搬 */
+function setPan(pan,dx,dy,dr,dt){
+  const nx=clamp(dx/dr,-1,1)*.15;
+  const nz=clamp(dy/dr,-1,1)*.17+.03;
+  const ny=clamp(-dy/dr,0,1)*.15;
+  const s=Math.min(1,dt*14);
+  if(pan.positionX){
+    pan.positionX.value+=(nx-pan.positionX.value)*s;
+    pan.positionY.value+=(ny-pan.positionY.value)*s;
+    pan.positionZ.value+=(nz-pan.positionZ.value)*s;
+  }else{try{pan.setPosition(nx,ny,nz);}catch(e){}}
+}
+function activeZones(){
+  return HEAD?ZONES:(EAR?ZONES_EAR:null);
+}
+function zoneAt(x,y){
+  const zs=activeZones();
+  if(!zs)return null;
+  if(HEAD&&headR<=0)return null;
+  let best=null,bd=1e9;
+  for(const z of zs){
+    const d=Math.hypot(x-z.px,y-z.py);
+    if(d<z.pr+14&&d<bd){bd=d;best=z;}
+  }
+  return best;
+}
+function setHint(t){const h=$('#hint');h.textContent=t;h.classList.remove('fade');hintHidden=false;}
+let VIEW='desk';
+function setView(v){
+  if(VIEW===v)return;
+  VIEW=v;
+  HEAD=(v==='head');
+  EAR=(v==='ear');
+  document.body.classList.toggle('head',HEAD);
   applyMicVisual();
-  toast(EAR?'耳道模式：道具放进耳道越深，声音越近、越闷、低频越足':'已切回麦克风模式');
+  stopAllLoops('切换视角，自动演奏已停止');
+  props.slice().forEach(p=>removeProp(p));
+  ZONES.forEach(z=>{z.fresh=1;z.glow=0;});
+  ZONES_EAR.forEach(z=>{z.fresh=1;z.glow=0;});
+  document.querySelectorAll('#viewSeg .segBtn').forEach(b=>b.classList.toggle('on',b.dataset.view===v));
+  if(v==='head'){
+    layout();
+    setHint('手指落在敏感区里挠：声音从头顶、脑后、耳边环绕过来；同一处挠久了会变麻，换个区轮着来');
+    toast('后脑视角：线稿就是你这颗头，指下即声源');
+  }else if(v==='ear'){
+    layout();
+    setHint('道具放进耳道越深声音越闷；敏感点开着时，绕着耳屏、耳垂、耳道口换位置挠，每个位置音色不同');
+    toast('耳道视角：道具放进耳道越深，声音越近、越闷、低频越足');
+  }else{
+    setHint('拖出一段轨迹后双击道具开启循环；点空白处或顶栏「⏹ 停止自动」随时结束，不用追着它跑');
+    toast('已切回桌面双麦');
+  }
+}
+document.querySelectorAll('#viewSeg .segBtn').forEach(b=>{
+  b.addEventListener('click',()=>setView(b.dataset.view));
+});
+$('#senBtn').addEventListener('click',()=>{
+  SENS=!SENS;
+  $('#senBtn').classList.toggle('on',SENS);
+  $('#senBtn').textContent=SENS?'敏感点 开':'敏感点 关';
+  if(!SENS)ZONES.forEach(z=>z.fresh=1);
+  toast(SENS?'敏感点开：各分区有亲和度，挠久了会钝，换区轮着来':'敏感点关：纯沙盒，怎么挠都一样响');
 });
 
 /* 桌面基准：休息位（也用于道具出生点） */
@@ -1253,7 +1728,7 @@ stage.addEventListener('pointerdown',e=>{
 
 /* ================= 道具生成与拖拽 ================= */
 let props=[];
-function removeProp(p){p.alive=false;p.engine.dispose();p.el.remove();
+function removeProp(p){p.alive=false;p.engine.dispose();if(p.spot)p.spot.remove();p.el.remove();
   props=props.filter(q=>q!==p);}
 
 function spawnProp(type,x,y){
@@ -1261,12 +1736,17 @@ function spawnProp(type,x,y){
   if(props.length>=8){toast('道具有一点多，先收走几个吧');return;}
   const el=document.createElement('div');
   el.className='pp '+type;
-  el.innerHTML=svgFor(type)+'<div class="modeBtn">手动</div><div class="rm">×</div>';
+  const eng=engineFor(type);
+  el.innerHTML=svgFor(type)+(eng.head?'':'<div class="modeBtn">手动</div>')+'<div class="rm">×</div>';
   stage.appendChild(el);
+  let spot=null;
+  if(eng.head){ /* 指下局部光斑 */
+    spot=document.createElement('div');spot.className='spotGlow';stage.appendChild(spot);
+  }
   const p={type,el,tx:x,ty:y,px:x,py:y,vx:0,vy:0,w:el.offsetWidth,h:el.offsetHeight,
     active:false,pid:null,gx:0,gy:0,downT:0,moved:0,alive:true,drift:0,mode:'glide',
-    loop:{on:false,path:null,T:0,ph:0,idx:0},rec:null,lastTap:0,
-    engine:engineFor(type)};
+    loop:{on:false,path:null,T:0,ph:0,idx:0},rec:null,lastTap:0,spot:spot,
+    engine:eng};
   el.addEventListener('pointerdown',e=>{
     if(e.target.classList&&e.target.classList.contains('rm')){e.stopPropagation();removeProp(p);return;}
     if(e.target.classList&&e.target.classList.contains('modeBtn')){e.stopPropagation();cycleMode(p);return;}
@@ -1377,10 +1857,72 @@ function loop(t){
     const pl=prox(p.px,p.py,micPx.L),pr=prox(p.px,p.py,micPx.R);
     if(EAR){if(pl>sideDL)sideDL=pl;if(pr>sideDR)sideDR=pr;} /* 耳道深度=两侧最近距离 */
     const lv=clamp(p.engine.level,0,1);
-    aL+=pl*lv;aR+=pr*lv;
     const bus=p.engine.bus;
+    /* 头顶模式：HRTF 3D 定位 + 分区频响 + 免疫钝化 */
+    if(bus.pan){
+      setPan(bus.pan,p.px-headCx,p.py-headCy,headR,dt);
+      const z=zoneAt(p.px,p.py);
+      if(z){
+        if(p._zone!==z.id){
+          if(!p._zone){rippleAt(z.px,z.py);vibe(8);} /* 入区提示 */
+          p._zone=z.id;
+        }
+        const aff=z.aff[p.type]!=null?z.aff[p.type]:.5;
+        const fresh=SENS?z.fresh:1;
+        const resp=.3+.7*fresh,drive=lv*resp;
+        bus.fg.gain.value+=(resp-bus.fg.gain.value)*Math.min(1,dt*10); /* 挠钝了声音变钝 */
+        /* 分区频响：不同部位不同Hz（MT思路），eq 平滑滑向该区频段 */
+        if(bus.eq){
+          const tq=Math.min(1,dt*8);
+          bus.eq.frequency.value+=(z.hz-bus.eq.frequency.value)*tq;
+          bus.eq.Q.value+=(z.q-bus.eq.Q.value)*tq;
+          bus.eq.gain.value+=((3.5+3.5*aff)-bus.eq.gain.value)*tq; /* 亲和的手法在该区频段更突出 */
+        }
+        z.glow=Math.min(1.2,z.glow+Math.max(0,Math.min(1,drive*2.4)-z.glow)*Math.min(1,dt*10));
+        if(SENS)z.fresh=Math.max(.22,z.fresh-dt*.05*lv*(.5+aff));
+      }else{
+        p._zone=null;
+        bus.fg.gain.value+=(1-bus.fg.gain.value)*Math.min(1,dt*6);
+        if(bus.eq){
+          const tq=Math.min(1,dt*6);
+          bus.eq.gain.value+=(0-bus.eq.gain.value)*tq;
+          bus.eq.frequency.value+=(1000-bus.eq.frequency.value)*tq;
+        }
+      }
+      /* 指下光斑：触着就亮（按住有保底亮度），动得越起劲越亮 */
+      if(p.spot){
+        p.spot.style.transform=`translate3d(${(p.px-60).toFixed(1)}px,${(p.py-60).toFixed(1)}px,0)`;
+        p.spot.style.opacity=Math.min(.8,Math.max(p.engine.level*.95,p.active?.32:0)).toFixed(3);
+      }
+      continue; /* 头顶模式不走双麦增益 */
+    }
+    aL+=pl*lv;aR+=pr*lv;
     /* 耳道模式：放得越深，声音越近越足 */
-    const gl=clamp(pl*(EAR?1+.9*pl:1)+.08*pr,0,1),gr=clamp(pr*(EAR?1+.9*pr:1)+.08*pl,0,1);
+    let gl=clamp(pl*(EAR?1+.9*pl:1)+.08*pr,0,1),gr=clamp(pr*(EAR?1+.9*pr:1)+.08*pl,0,1);
+    /* 耳道视角敏感点：分区频响+免疫钝化，resp 乘进双麦增益 */
+    if(EAR&&bus.eq){
+      const z=zoneAt(p.px,p.py);
+      if(z){
+        if(p._zone!==z.id){
+          if(!p._zone){rippleAt(z.px,z.py);vibe(8);} /* 入区提示 */
+          p._zone=z.id;
+        }
+        const aff=z.aff[p.type]!=null?z.aff[p.type]:.5;
+        const resp=SENS?(.3+.7*z.fresh):1;
+        const tq=Math.min(1,dt*8);
+        bus.eq.frequency.value+=(z.hz-bus.eq.frequency.value)*tq;
+        bus.eq.Q.value+=(z.q-bus.eq.Q.value)*tq;
+        bus.eq.gain.value+=((3.5+3.5*aff)-bus.eq.gain.value)*tq;
+        z.glow=Math.min(1.2,z.glow+Math.max(0,Math.min(1,lv*resp*2.4)-z.glow)*Math.min(1,dt*10));
+        if(SENS)z.fresh=Math.max(.22,z.fresh-dt*.05*lv*(.5+aff));
+        gl*=resp;gr*=resp;
+      }else{
+        p._zone=null;
+        const tq=Math.min(1,dt*6);
+        bus.eq.gain.value+=(0-bus.eq.gain.value)*tq;
+        bus.eq.frequency.value+=(1000-bus.eq.frequency.value)*tq;
+      }
+    }
     const sk=Math.min(1,dt*18);
     bus.gL.gain.value+=(gl-bus.gL.gain.value)*sk;
     bus.gR.gain.value+=(gr-bus.gR.gain.value)*sk;
@@ -1394,6 +1936,19 @@ function loop(t){
       if(!p._fx)p._fx=1;
       if(dL+12<dR&&p._fx!==-1){p._fx=-1;p.el.style.setProperty('--fx',-1);}
       else if(dR+12<dL&&p._fx!==1){p._fx=1;p.el.style.setProperty('--fx',1);}
+    }
+  }
+  /* 敏感区恢复 + 区块指示（后脑视角亮区块；耳道视角的反馈在声音里） */
+  const zs=activeZones();
+  if(zs){
+    for(const z of zs){
+      if(SENS)z.fresh=Math.min(1,z.fresh+dt*.018);
+      z.glow*=Math.exp(-dt*2.6);
+      const g=zoneEls[z.id];
+      if(g){
+        g.style.opacity=(.1+.85*z.glow).toFixed(3);
+        g.classList.toggle('numb',SENS&&z.fresh<.45);
+      }
     }
   }
   /* 耳道模式：深度 → 频响变化（越深越闷 + 低频鼓胀） */
@@ -1430,13 +1985,14 @@ $('#tone').addEventListener('input',e=>{
 $('#startBtn').addEventListener('click',()=>{
   ensureAudio();
   $('#overlay').classList.add('hidden');
-  /* 开机礼：自动放一根棉签，告诉用户"动了才有声音" */
+  /* 开机礼：自动放一根道具，告诉用户"动了才有声音"（头模式送指腹按压，落点即头顶） */
   setTimeout(()=>{
     if(props.length===0){
       const r=stage.getBoundingClientRect();
-      spawnProp('cotton',r.width*.5,r.height*.42);
+      if(HEAD)spawnProp('fpad',r.width*.5,r.height*.42);
+      else spawnProp('cotton',r.width*.5,r.height*.42);
     }
-    toast('按住棉签拖到耳边移动就有声音 · 想要底噪就选个场景');
+    toast(HEAD?'按住道具在分区里挠就有声音 · 同一处挠久了会变麻':'按住棉签拖到耳边移动就有声音 · 想要底噪就选个场景');
   },380);
   if(AC&&AC.state!=='running')setTimeout(()=>toast('点一下屏幕任意位置开启声音'),2400);
 });
